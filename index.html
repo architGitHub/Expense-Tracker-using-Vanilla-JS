@@ -71,29 +71,45 @@
         const element = document.querySelector("#btnAddExpense")                        
         let totalExpense = 0
         allExpenses = [];
-        headingEl.textContent = totalExpense
+		headingEl.textContent = `Expense is: ${totalExpense}`
+		
         function addAddExpenseToTotal() {
-            expenseItem = {};
-            const textAmount = inputElement.value
-            const textDesc = inputDescEl.value            
-            const expense = parseInt(textAmount, 10)
+			if (inputElement.value == '' || inputDescEl.value == ''){
+				alert('You cannot leave the field blank!!')
+			}
 
-            expenseItem.desc = textDesc;
-			expenseItem.amount = expense
-			expenseItem.moment = new Date()
+			else{
+				expenseItem = {};
+				const textAmount = inputElement.value
+				const textDesc = inputDescEl.value            
+				const expense = parseInt(textAmount, 10)
 
-            allExpenses.push(expenseItem)
-            totalExpense = totalExpense + expense
+				expenseItem.desc = textDesc;
+				expenseItem.amount = expense
+				expenseItem.moment = new Date()
+				allExpenses.push(expenseItem)
+				sum()
 
-            const someText = `Expense is: ${totalExpense}`
-            headingEl.textContent = someText
+				inputElement.value = ''
+				inputDescEl.value = ''
 
-            renderList(allExpenses)
+				renderList(allExpenses)
+			}
         }
+
+		function sum(){
+				let totalExpense = 0 ;
+					for (let index = 0; index < allExpenses.length; index++) {
+						totalExpense =  totalExpense + allExpenses[index].amount;
+					}
+						
+				const headingElement = document.querySelector("#headingTotal");
+				headingElement.textContent = `Expense is: ${totalExpense}` ;
+		}
+		
 		element.addEventListener("click", addAddExpenseToTotal, false)
-
+		
 		function getDateString(momentNow){
-
 			return momentNow.toLocaleDateString('en-US', {
 									year: 'numeric',
 									month:'long',
@@ -108,7 +124,7 @@
 					newArr.push(allExpenses[i])
 			}
 			allExpenses = newArr
-			// const newArr = allExpenses.filter(expense => expense.moment.valueOf() !== dateValue)
+			sum()
 			renderList(newArr)
 		}
 
